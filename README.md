@@ -3,6 +3,22 @@ AMS
 
 Asynchronous Messaging Service Framework
 
+In a data system based on AMS, any module may be introduced into or removed from the system 
+at any time without inhibiting the ability of any other module to continue sending and 
+receiving messages. The system’s modules have no inter-dependency to become or stay operational. 
+
+AMS-based systems are highly robust, lacking any single point of failure and tolerant
+of unplanned module termination. At the same time, communication within an AMS-based
+system is rapid and efficient:
+* Messages are exchanged directly between modules rather than through any central
+message dispatching nexus (i.e. brokers).
+* Messages are automatically conveyed using the most suitable underlying transport
+service to which the sending and receiving modules both have access (TCP/IP). 
+
+Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
+no significant impact on application performance.
+
+Asynchronous Messaging Service API:
 
     // Create or just return a singleton instance
     static IService& instance();
