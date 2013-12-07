@@ -18,47 +18,62 @@ service to which the sending and receiving modules both have access (TCP/IP).
 Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
 no significant impact on application performance.
 
-Asynchronous Messaging Service API:
+Asynchronous Messaging Service API
+----------------------------------
 
-    // Create or just return a singleton instance
-    static IService& instance();
-    // Destroy the singleton instance
-    static void destroy();
+Create or just return a singleton IService instance
 
-    // Create a messaging domain restricted for communication
-    void create_domain(std::string domainName, std::string selfDesc);
+    static IService& IService::instance();
 
-    // Create a subscriber for T-typed messages
+Create (or joins to) a messaging domain that is restricted for communication
+
+    void IService::create_domain(std::string domainName, std::string appName);
+    
+Start/stop the reactor for both the communication and the dynamic discovery
+
+    void IService::reactor_start();
+    void IService::reactor_stop();
+
+Create a subscriber for T-typed messages
+
     template<typename T>
-    void create_subscriber();
+    void IService::create_subscriber();
+    
+Subscribe a handler object for T-typed messages received
 
-    // Create a publisher for T-typed messages
     template<typename T>
-    void create_publisher();
+    void IService::subscribe(IHandler& handler);
+    
+Unsubscribe from receiving T-typed messages
 
-    // Subscribe a handler to T-typed messages dispatched automatically
     template<typename T>
-    void subscribe(IHandler& handler);
+    void IService::unsubscribe();
 
-    // Unsubscribe from receiving T-typed messages
+Create a publisher for T-typed messages
+
     template<typename T>
-    void unsubscribe();
+    void IService::create_publisher();
 
-    // Send a message to all subscribers
-    void send_message(IMsgObj& obj);
+Send a message to all subscribers
 
-    // Start/stop the reactor for the communication
-    void reactor_start();
-    void reactor_stop();
+    void IService::send_message(IMsgObj& obj);
 
-    // Register a notifier for peer status updates within the domain
-    void register_discovery(IPeerNotification* notifier);
+Register a notifier for peer status updates within the domain
 
-    // Return the host ip address
-    std::string get_host_ip() const;
+    void IService::register_discovery(IPeerNotification* notifier);
 
-    // Return the service logger
-    Poco::Logger& logger() { return *m_consoleLogger; }        
+Return the own host ip address
 
-    // Run service in debug mode
-    void debug_mode() { m_consoleLogger->setLevel("debug"); }
+    std::string IService::get_host_ip() const;
+    
+Destroy the service singleton instance
+
+    static void IService::destroy();
+    
+Return the service global logger
+
+    Poco::Logger& IService::logger();  
+
+Run the service in debug mode for exhaustive logging
+
+    void IService::debug_mode();
