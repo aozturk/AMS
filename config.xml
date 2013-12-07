@@ -1,0 +1,4 @@
+<topology>
+  <peer>172.17.242.16</peer>
+  <peer>172.17.242.31</peer>
+</topology>
