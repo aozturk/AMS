@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>AMS by aozturk</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>AMS</h1>
+        <p>Asynchronous Messaging Service Framework</p>
+
+        <p class="view"><a href="https://github.com/aozturk/AMS">View the Project on GitHub <small>aozturk/AMS</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/aozturk/AMS/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/aozturk/AMS/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/aozturk/AMS">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="ams" class="anchor" href="#ams"><span class="octicon octicon-link"></span></a>AMS</h1>
+
+<p>Asynchronous Messaging Service Framework</p>
+
+<p>In a data system based on AMS, any module may be introduced into or removed from the system 
+at any time without inhibiting the ability of any other module to continue sending and 
+receiving messages. The system’s modules have no inter-dependency to become or stay operational. </p>
+
+<p>AMS-based systems are highly robust, lacking any single point of failure and tolerant
+of unplanned module termination. At the same time, communication within an AMS-based
+system is rapid and efficient:</p>
+
+<ul>
+<li>Messages are exchanged directly between modules rather than through any central
+message dispatching nexus (i.e. brokers).</li>
+<li>Messages are automatically conveyed using the most suitable underlying transport
+service to which the sending and receiving modules both have access (TCP/IP). </li>
+</ul><p>Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
+no significant impact on application performance.</p>
+
+<h2>
+<a name="asynchronous-messaging-service-api" class="anchor" href="#asynchronous-messaging-service-api"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service API</h2>
+
+<p>Create or just return a singleton IService instance</p>
+
+<pre><code>static IService&amp; IService::instance();
+</code></pre>
+
+<p>Create (or joins to) a messaging domain that is restricted for communication</p>
+
+<pre><code>void IService::create_domain(std::string domainName, std::string appName);
+</code></pre>
+
+<p>Start/stop the reactor for both the communication and the dynamic discovery</p>
+
+<pre><code>void IService::reactor_start();
+void IService::reactor_stop();
+</code></pre>
+
+<p>Create a subscriber for T-typed messages</p>
+
+<pre><code>template&lt;typename T&gt;
+void IService::create_subscriber();
+</code></pre>
+
+<p>Subscribe a handler object for T-typed messages received</p>
+
+<pre><code>template&lt;typename T&gt;
+void IService::subscribe(IHandler&amp; handler);
+</code></pre>
+
+<p>Unsubscribe from receiving T-typed messages</p>
+
+<pre><code>template&lt;typename T&gt;
+void IService::unsubscribe();
+</code></pre>
+
+<p>Create a publisher for T-typed messages</p>
+
+<pre><code>template&lt;typename T&gt;
+void IService::create_publisher();
+</code></pre>
+
+<p>Send a message to all subscribers</p>
+
+<pre><code>void IService::send_message(IMsgObj&amp; obj);
+</code></pre>
+
+<p>Register a notifier for peer status updates within the domain</p>
+
+<pre><code>void IService::register_discovery(IPeerNotification* notifier);
+</code></pre>
+
+<p>Return the own host ip address</p>
+
+<pre><code>std::string IService::get_host_ip() const;
+</code></pre>
+
+<p>Destroy the service singleton instance</p>
+
+<pre><code>static void IService::destroy();
+</code></pre>
+
+<p>Return the service global logger</p>
+
+<pre><code>Poco::Logger&amp; IService::logger();  
+</code></pre>
+
+<p>Run the service in debug mode for exhaustive logging</p>
+
+<pre><code>void IService::debug_mode();
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/aozturk">aozturk</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
