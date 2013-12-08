@@ -1,7 +1,11 @@
-AMS
+AMS - Asynchronous Messaging Service
 ===
 
-Asynchronous Messaging Service Framework
+Features
+--------
+
+##### Asynchronous Message Passing
+Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other. Event loop waits for messages and dispatches them to registered handlers in a program. The event-loop is used in conjunction with a reactor polling socket interfaces.
 
 ##### Loosely Coupled
 In a data system based on AMS, any module may be introduced into or removed from the system 
