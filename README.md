@@ -5,7 +5,9 @@ Features
 --------
 
 ##### Asynchronous Message Passing
-Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other. Event loop waits for messages and dispatches them to registered handlers in a program. The event-loop is used in conjunction with a reactor polling socket interfaces.
+Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.
+
+The reactor used in AMS handles requests delivered concurrently by multiple event resources. Mesage dispatcher handles registering and unregistering of application-defined message handlers, and dispatches messages from the demultiplexer to the associated handlers. Event demultiplexer uses an event loop to block on all resources.
 
 ##### Loosely Coupled
 In a data system based on AMS, any module may be introduced into or removed from the system 
@@ -27,8 +29,8 @@ service (TCP/IP) to which the sending and receiving modules both have access.
 Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
 no significant impact on application performance.
 
-Asynchronous Messaging Service API
-----------------------------------
+API
+---
 
 Create or just return a singleton IService instance
 
