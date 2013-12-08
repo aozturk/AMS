@@ -29,28 +29,49 @@
       </header>
       <section>
         <h1>
-<a name="ams" class="anchor" href="#ams"><span class="octicon octicon-link"></span></a>AMS</h1>
+<a name="ams---asynchronous-messaging-service" class="anchor" href="#ams---asynchronous-messaging-service"><span class="octicon octicon-link"></span></a>AMS - Asynchronous Messaging Service</h1>
 
-<p>Asynchronous Messaging Service Framework</p>
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<h5>
+<a name="asynchronous-message-passing" class="anchor" href="#asynchronous-message-passing"><span class="octicon octicon-link"></span></a>Asynchronous Message Passing</h5>
+
+<p>Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.</p>
+
+<p>The reactor used in AMS handles requests delivered concurrently by multiple event resources. Mesage dispatcher handles registering and unregistering of application-defined message handlers, and dispatches messages from the demultiplexer to the associated handlers. Event demultiplexer uses an event loop to block on all resources.</p>
+
+<h5>
+<a name="loosely-coupled" class="anchor" href="#loosely-coupled"><span class="octicon octicon-link"></span></a>Loosely Coupled</h5>
 
 <p>In a data system based on AMS, any module may be introduced into or removed from the system 
 at any time without inhibiting the ability of any other module to continue sending and 
 receiving messages. The system’s modules have no inter-dependency to become or stay operational. </p>
 
+<h5>
+<a name="fault-tolerant" class="anchor" href="#fault-tolerant"><span class="octicon octicon-link"></span></a>Fault-tolerant</h5>
+
 <p>AMS-based systems are highly robust, lacking any single point of failure and tolerant
-of unplanned module termination. At the same time, communication within an AMS-based
-system is rapid and efficient:</p>
+of unplanned module termination. </p>
+
+<h5>
+<a name="fast" class="anchor" href="#fast"><span class="octicon octicon-link"></span></a>Fast</h5>
+
+<p>Communication within an AMS-based system is rapid and efficient:</p>
 
 <ul>
 <li>Messages are exchanged directly between modules rather than through any central
 message dispatching nexus (i.e. brokers).</li>
 <li>Messages are automatically conveyed using the most suitable underlying transport
-service to which the sending and receiving modules both have access (TCP/IP). </li>
-</ul><p>Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
+service (TCP/IP) to which the sending and receiving modules both have access. </li>
+</ul><h5>
+<a name="scalable" class="anchor" href="#scalable"><span class="octicon octicon-link"></span></a>Scalable</h5>
+
+<p>Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have
 no significant impact on application performance.</p>
 
 <h2>
-<a name="asynchronous-messaging-service-api" class="anchor" href="#asynchronous-messaging-service-api"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service API</h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
 
 <p>Create or just return a singleton IService instance</p>
 
