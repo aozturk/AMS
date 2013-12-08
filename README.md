@@ -3,7 +3,7 @@ AMS
 
 Asynchronous Messaging Service Framework
 
-##### Loose Coupling
+##### Loosely Coupled
 In a data system based on AMS, any module may be introduced into or removed from the system 
 at any time without inhibiting the ability of any other module to continue sending and 
 receiving messages. The system’s modules have no inter-dependency to become or stay operational. 
