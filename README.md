@@ -1,4 +1,4 @@
-AMS - Asynchronous Messaging Service
+Asynchronous Messaging Service (AMS)
 ===
 
 Features
@@ -13,6 +13,8 @@ The reactor used in AMS handles requests delivered concurrently by multiple even
 In a data system based on AMS, any module may be introduced into or removed from the system 
 at any time without inhibiting the ability of any other module to continue sending and 
 receiving messages. The system’s modules have no inter-dependency to become or stay operational. 
+
+By publish–subscribe pattern used in AMS, senders of messages called publishers do not program the messages to be sent directly to specific receivers. Instead, published messages are characterized into classes, without knowledge of subscribers. Similarly, subscribers express interest in one or more classes, and only receive messages that are of interest, without knowledge of publishers.
 
 ##### Fault-tolerant
 AMS-based systems are highly robust, lacking any single point of failure and tolerant
@@ -95,3 +97,108 @@ Dependencies
 * Poco C++ 1.4.x
 * ZeroMQ 3.2.x
 * MessagePack 0.5.x
+
+Example
+-------
+
+Declaring our message class first. Classes can be composed from other classes.
+
+    class TestMsg : public AMS::IMsgObj {
+    public:
+        // give unique id to each message
+        TestMsg() : IMsgObj(/*msg id*/1) {
+        }
+
+        // can use primitive types and string
+        std::string name;
+        double value;
+        // can use other class objects
+        AdditionalInfo info;
+        // can use vector and map containers
+        std::vector<int> members;
+        std::map<int, int> mappings;
+
+        // allow serialization of only the selected members
+        MSGPACK_DEFINE(name, value, info, members, mappings);
+    };
+
+    class AdditionalInfo {
+    public:
+        std::string address;
+        double offset;
+
+        // add only fields that will be serialized
+        MSGPACK_DEFINE(address);
+    };
+
+Publisher example
+    
+    void pub() {
+        // create or get the singleton AMS service
+        AMS::IService& service = AMS::IService::instance();
+        
+        // enable exhaustive logging (i.e. message received/sent)
+        service.debug_mode();
+        // can use global logger of AMS service
+        service.logger().information("publisher side running...");
+
+        // should first create or join to a domain 
+        // give unique domain name and application name as parameters
+        service.create_domain("ams_test", "Test_PUB");
+
+        // creates a publisher for the associated message
+        service.create_publisher<TestMsg>();
+
+        // should start the reactor for communication
+        service.reactor_start();
+
+        for (int i=0; i<100; ++i)
+        {       
+            // prepare a message to send
+            TestMsg msg;
+            msg.value = i;
+            msg.name = "testing.";
+            service.send_message(msg);
+        }
+    }
+    
+Subscriber example
+
+    // define a handler class for the message first
+    class TestMsgHandler : public AMS::IHandler {
+    public:
+        virtual void handle(AMS::IMsgObj* baseMsg) {
+            TestMsg* msg = dynamic_cast<TestMsg*>(baseMsg);
+            if (msg != 0) {
+                // process message here
+            }
+        }
+    };
+
+    void sub() {
+        AMS::IService& service = AMS::IService::instance();
+
+        service.debug_mode();
+        service.logger().information("subscriber side running...");
+ 
+        // joins to the domain with unique application name
+        service.create_domain("ams_test", "Test_SUB");
+
+        // creates a subscriber for the associated message
+        service.create_subscriber<TestMsg>();
+        TestMsgHandler handler;
+        service.subscribe<TestMsg>(handler);
+
+        // should start the reactor for communication
+        service.reactor_start();
+        
+        // wait enough here to receive messages sent by pusblisher
+        // i.e. sleep() here
+    }
+
+
+License
+-------
+
+Licensed under [the Apache 2.0 license](LICENSE). 
+
