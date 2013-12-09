@@ -4,7 +4,7 @@ AMS - Asynchronous Messaging Service
 Features
 --------
 
-##### Asynchronous Message Passing
+##### Asynchronous
 Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.
 
 The reactor used in AMS handles requests delivered concurrently by multiple event resources. Mesage dispatcher handles registering and unregistering of application-defined message handlers, and dispatches messages from the demultiplexer to the associated handlers. Event demultiplexer uses an event loop to block on all resources.
@@ -88,3 +88,10 @@ Return the service global logger
 Run the service in debug mode for exhaustive logging
 
     void IService::debug_mode();
+
+Dependencies
+------------
+
+* Poco C++ 1.4.x
+* ZeroMQ 3.2.x
+* MessagePack 0.5.x
