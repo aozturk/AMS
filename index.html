@@ -29,13 +29,13 @@
       </header>
       <section>
         <h1>
-<a name="ams---asynchronous-messaging-service" class="anchor" href="#ams---asynchronous-messaging-service"><span class="octicon octicon-link"></span></a>AMS - Asynchronous Messaging Service</h1>
+<a name="asynchronous-messaging-service-ams" class="anchor" href="#asynchronous-messaging-service-ams"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service (AMS)</h1>
 
 <h2>
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <h5>
-<a name="asynchronous-message-passing" class="anchor" href="#asynchronous-message-passing"><span class="octicon octicon-link"></span></a>Asynchronous Message Passing</h5>
+<a name="asynchronous" class="anchor" href="#asynchronous"><span class="octicon octicon-link"></span></a>Asynchronous</h5>
 
 <p>Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.</p>
 
@@ -47,6 +47,8 @@
 <p>In a data system based on AMS, any module may be introduced into or removed from the system 
 at any time without inhibiting the ability of any other module to continue sending and 
 receiving messages. The system’s modules have no inter-dependency to become or stay operational. </p>
+
+<p>By publish–subscribe pattern used in AMS, senders of messages called publishers do not program the messages to be sent directly to specific receivers. Instead, published messages are characterized into classes, without knowledge of subscribers. Similarly, subscribers express interest in one or more classes, and only receive messages that are of interest, without knowledge of publishers.</p>
 
 <h5>
 <a name="fault-tolerant" class="anchor" href="#fault-tolerant"><span class="octicon octicon-link"></span></a>Fault-tolerant</h5>
@@ -142,6 +144,119 @@ void IService::create_publisher();
 
 <pre><code>void IService::debug_mode();
 </code></pre>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>Poco C++ 1.4.x</li>
+<li>ZeroMQ 3.2.x</li>
+<li>MessagePack 0.5.x</li>
+</ul><h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>Declaring our message class first. Classes can be composed from other classes.</p>
+
+<pre><code>class TestMsg : public AMS::IMsgObj {
+public:
+    // give unique id to each message
+    TestMsg() : IMsgObj(/*msg id*/1) {
+    }
+
+    // can use primitive types and string
+    std::string name;
+    double value;
+    // can use other class objects
+    AdditionalInfo info;
+    // can use vector and map containers
+    std::vector&lt;int&gt; members;
+    std::map&lt;int, int&gt; mappings;
+
+    // allow serialization of only the selected members
+    MSGPACK_DEFINE(name, value, info, members, mappings);
+};
+
+class AdditionalInfo {
+public:
+    std::string address;
+    double offset;
+
+    // add only fields that will be serialized
+    MSGPACK_DEFINE(address);
+};
+</code></pre>
+
+<p>Publisher example</p>
+
+<pre><code>void pub() {
+    // create or get the singleton AMS service
+    AMS::IService&amp; service = AMS::IService::instance();
+
+    // enable exhaustive logging (i.e. message received/sent)
+    service.debug_mode();
+    // can use global logger of AMS service
+    service.logger().information("publisher side running...");
+
+    // should first create or join to a domain 
+    // give unique domain name and application name as parameters
+    service.create_domain("ams_test", "Test_PUB");
+
+    // creates a publisher for the associated message
+    service.create_publisher&lt;TestMsg&gt;();
+
+    // should start the reactor for communication
+    service.reactor_start();
+
+    for (int i=0; i&lt;100; ++i)
+    {       
+        // prepare a message to send
+        TestMsg msg;
+        msg.value = i;
+        msg.name = "testing.";
+        service.send_message(msg);
+    }
+}
+</code></pre>
+
+<p>Subscriber example</p>
+
+<pre><code>// define a handler class for the message first
+class TestMsgHandler : public AMS::IHandler {
+public:
+    virtual void handle(AMS::IMsgObj* baseMsg) {
+        TestMsg* msg = dynamic_cast&lt;TestMsg*&gt;(baseMsg);
+        if (msg != 0) {
+            // process message here
+        }
+    }
+};
+
+void sub() {
+    AMS::IService&amp; service = AMS::IService::instance();
+
+    service.debug_mode();
+    service.logger().information("subscriber side running...");
+
+    // joins to the domain with unique application name
+    service.create_domain("ams_test", "Test_SUB");
+
+    // creates a subscriber for the associated message
+    service.create_subscriber&lt;TestMsg&gt;();
+    TestMsgHandler handler;
+    service.subscribe&lt;TestMsg&gt;(handler);
+
+    // should start the reactor for communication
+    service.reactor_start();
+
+    // wait enough here to receive messages sent by pusblisher
+    // i.e. sleep() here
+}
+</code></pre>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Licensed under <a href="LICENSE">the Apache 2.0 license</a>. </p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/aozturk">aozturk</a></p>
