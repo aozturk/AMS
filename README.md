@@ -18,9 +18,9 @@ By publish–subscribe pattern used in AMS, senders of messages called publisher
 AMS-based systems are highly robust, lacking any single point of failure and tolerant of unplanned module termination. 
 
 #### Dynamic Discovery
-AMS provides dynamic discovery of publishers and subscribers. Dynamic discovery makes your DDS applications extensible. This means the application does not have to know or configure the endpoints for communications because they are automatically discovered. AMS will also discover the type of data being published. 
+AMS provides dynamic discovery of publishers and subscribers that makes your applications extensible. This means the application does not have to know or configure the endpoints for communications because they are automatically discovered. AMS will also discover the type of data being published. 
 
-If multicast is not supported for target environment or static discovery is the preferred method, AMS uses custom config.xml file to determine peers in the network topology. 
+If multicast is not supported for target environment or static discovery is the preferred method, AMS also uses custom config.xml file to determine peers in the network topology. 
 
 #### Fast
 Communication within an AMS-based system is rapid and efficient:
