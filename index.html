@@ -58,7 +58,7 @@
 
 <p>AMS provides dynamic discovery of publishers and subscribers that makes your applications extensible. This means the application does not have to know or configure the endpoints for communications because they are automatically discovered. AMS will also discover the type of data being published. </p>
 
-<p>If multicast is not supported for target environment or static discovery is the preferred method, AMS also uses custom config.xml file to determine peers in the network topology. </p>
+<p>If multicast is not supported for target environment or dynamic discovery is not preferred, AMS also uses customized config.xml file during initialization to determine peers in the network topology. </p>
 
 <h4>
 <a name="fast" class="anchor" href="#fast"><span class="octicon octicon-link"></span></a>Fast</h4>
@@ -77,72 +77,72 @@ message dispatching nexus (i.e. brokers).</li>
 <h2>
 <a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
 
-<p>Create or just return a singleton IService instance</p>
+<p>Creates or just returns a singleton AMS service instance</p>
 
 <pre><code>static IService&amp; IService::instance();
 </code></pre>
 
-<p>Create (or joins to) a messaging domain that is restricted for communication</p>
+<p>Creates (or joins to) a messaging domain that is restricted for communication</p>
 
 <pre><code>void IService::create_domain(std::string domainName, std::string appName);
 </code></pre>
 
-<p>Start/stop the reactor for both the communication and the dynamic discovery</p>
+<p>Starts/stops the reactor for both the communication and the dynamic discovery</p>
 
 <pre><code>void IService::reactor_start();
 void IService::reactor_stop();
 </code></pre>
 
-<p>Create a subscriber for T-typed messages</p>
+<p>Creates a subscriber for T-typed messages</p>
 
 <pre><code>template&lt;typename T&gt;
 void IService::create_subscriber();
 </code></pre>
 
-<p>Subscribe a handler object for T-typed messages received</p>
+<p>Subscribes a handler object for T-typed messages received</p>
 
 <pre><code>template&lt;typename T&gt;
 void IService::subscribe(IHandler&amp; handler);
 </code></pre>
 
-<p>Unsubscribe from receiving T-typed messages</p>
+<p>Unsubscribes from receiving T-typed messages</p>
 
 <pre><code>template&lt;typename T&gt;
 void IService::unsubscribe();
 </code></pre>
 
-<p>Create a publisher for T-typed messages</p>
+<p>Creates a publisher for T-typed messages</p>
 
 <pre><code>template&lt;typename T&gt;
 void IService::create_publisher();
 </code></pre>
 
-<p>Send a message to all subscribers</p>
+<p>Sends a message to all subscribers</p>
 
 <pre><code>void IService::send_message(IMsgObj&amp; obj);
 </code></pre>
 
-<p>Register a notifier for peer status updates within the domain</p>
+<p>Registers a notifier for peer status updates within the domain</p>
 
 <pre><code>void IService::register_discovery(IPeerNotification* notifier);
 </code></pre>
 
-<p>Return the own host ip address</p>
+<p>Returns the own host ip address</p>
 
 <pre><code>std::string IService::get_host_ip() const;
 </code></pre>
 
-<p>Destroy the service singleton instance</p>
+<p>Destroys the service singleton instance</p>
 
 <pre><code>static void IService::destroy();
 </code></pre>
 
-<p>Return the service global logger</p>
+<p>Returns the service global logger</p>
 
 <pre><code>Poco::Logger&amp; IService::logger();  
 </code></pre>
 
-<p>Run the service in debug mode for exhaustive logging</p>
+<p>Runs the service in debug mode for exhaustive logging</p>
 
 <pre><code>void IService::debug_mode();
 </code></pre>
@@ -161,7 +161,7 @@ void IService::create_publisher();
 
 <pre><code>class TestMsg : public AMS::IMsgObj {
 public:
-    // give unique id to each message
+    // gives unique id to each message
     TestMsg() : IMsgObj(/*msg id*/1) {
     }
 
@@ -174,7 +174,7 @@ public:
     std::vector&lt;int&gt; members;
     std::map&lt;int, int&gt; mappings;
 
-    // allow serialization of only the selected members
+    // allows serialization of only the selected members
     MSGPACK_DEFINE(name, value, info, members, mappings);
 };
 
@@ -183,7 +183,7 @@ public:
     std::string address;
     double offset;
 
-    // add only fields that will be serialized
+    // adds only fields that will be serialized
     MSGPACK_DEFINE(address);
 };
 </code></pre>
@@ -191,30 +191,31 @@ public:
 <p>Publisher example</p>
 
 <pre><code>void pub() {
-    // create or get the singleton AMS service
+    // creates or gets the singleton AMS service
     AMS::IService&amp; service = AMS::IService::instance();
 
-    // enable exhaustive logging (i.e. message received/sent)
+    // enables exhaustive logging (i.e. message received/sent)
     service.debug_mode();
     // can use global logger of AMS service
     service.logger().information("publisher side running...");
 
     // should first create or join to a domain 
-    // give unique domain name and application name as parameters
+    // gives unique domain name and application name as parameters
     service.create_domain("ams_test", "Test_PUB");
 
     // creates a publisher for the associated message
     service.create_publisher&lt;TestMsg&gt;();
 
-    // should start the reactor for communication
+    // starts the reactor for communication
     service.reactor_start();
 
     for (int i=0; i&lt;100; ++i)
     {       
-        // prepare a message to send
+        // prepares a message to send
         TestMsg msg;
         msg.value = i;
         msg.name = "testing.";
+        // sends the message to all subscribers
         service.send_message(msg);
     }
 }
@@ -222,7 +223,7 @@ public:
 
 <p>Subscriber example</p>
 
-<pre><code>// define a handler class for the message first
+<pre><code>// defines a handler class for the message first
 class TestMsgHandler : public AMS::IHandler {
 public:
     virtual void handle(AMS::IMsgObj* baseMsg) {
@@ -244,14 +245,15 @@ void sub() {
 
     // creates a subscriber for the associated message
     service.create_subscriber&lt;TestMsg&gt;();
+    // attaches handler to the subscriber
     TestMsgHandler handler;
     service.subscribe&lt;TestMsg&gt;(handler);
 
-    // should start the reactor for communication
+    // starts the reactor for communication
     service.reactor_start();
 
     // wait enough here to receive messages sent by pusblisher
-    // i.e. sleep() here
+    // i.e. sleep
 }
 </code></pre>
 
