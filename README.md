@@ -20,7 +20,7 @@ AMS-based systems are highly robust, lacking any single point of failure and tol
 #### Dynamic Discovery
 AMS provides dynamic discovery of publishers and subscribers that makes your applications extensible. This means the application does not have to know or configure the endpoints for communications because they are automatically discovered. AMS will also discover the type of data being published. 
 
-If multicast is not supported for target environment or static discovery is the preferred method, AMS also uses custom config.xml file to determine peers in the network topology. 
+If multicast is not supported for target environment or dynamic discovery is not preferred, AMS also uses customized config.xml file during initialization to determine peers in the network topology. 
 
 #### Fast
 Communication within an AMS-based system is rapid and efficient:
@@ -34,60 +34,60 @@ Finally, AMS provides high scalability; hundreds or thousands of cooperating mod
 API
 ---
 
-Create or just return a singleton IService instance
+Creates or just returns a singleton AMS service instance
 
     static IService& IService::instance();
 
-Create (or joins to) a messaging domain that is restricted for communication
+Creates (or joins to) a messaging domain that is restricted for communication
 
     void IService::create_domain(std::string domainName, std::string appName);
     
-Start/stop the reactor for both the communication and the dynamic discovery
+Starts/stops the reactor for both the communication and the dynamic discovery
 
     void IService::reactor_start();
     void IService::reactor_stop();
 
-Create a subscriber for T-typed messages
+Creates a subscriber for T-typed messages
 
     template<typename T>
     void IService::create_subscriber();
     
-Subscribe a handler object for T-typed messages received
+Subscribes a handler object for T-typed messages received
 
     template<typename T>
     void IService::subscribe(IHandler& handler);
     
-Unsubscribe from receiving T-typed messages
+Unsubscribes from receiving T-typed messages
 
     template<typename T>
     void IService::unsubscribe();
 
-Create a publisher for T-typed messages
+Creates a publisher for T-typed messages
 
     template<typename T>
     void IService::create_publisher();
 
-Send a message to all subscribers
+Sends a message to all subscribers
 
     void IService::send_message(IMsgObj& obj);
 
-Register a notifier for peer status updates within the domain
+Registers a notifier for peer status updates within the domain
 
     void IService::register_discovery(IPeerNotification* notifier);
 
-Return the own host ip address
+Returns the own host ip address
 
     std::string IService::get_host_ip() const;
     
-Destroy the service singleton instance
+Destroys the service singleton instance
 
     static void IService::destroy();
     
-Return the service global logger
+Returns the service global logger
 
     Poco::Logger& IService::logger();  
 
-Run the service in debug mode for exhaustive logging
+Runs the service in debug mode for exhaustive logging
 
     void IService::debug_mode();
 
@@ -105,7 +105,7 @@ Declaring our message class first. Classes can be composed from other classes.
 
     class TestMsg : public AMS::IMsgObj {
     public:
-        // give unique id to each message
+        // gives unique id to each message
         TestMsg() : IMsgObj(/*msg id*/1) {
         }
 
@@ -118,7 +118,7 @@ Declaring our message class first. Classes can be composed from other classes.
         std::vector<int> members;
         std::map<int, int> mappings;
 
-        // allow serialization of only the selected members
+        // allows serialization of only the selected members
         MSGPACK_DEFINE(name, value, info, members, mappings);
     };
 
@@ -127,44 +127,45 @@ Declaring our message class first. Classes can be composed from other classes.
         std::string address;
         double offset;
 
-        // add only fields that will be serialized
+        // adds only fields that will be serialized
         MSGPACK_DEFINE(address);
     };
 
 Publisher example
     
     void pub() {
-        // create or get the singleton AMS service
+        // creates or gets the singleton AMS service
         AMS::IService& service = AMS::IService::instance();
         
-        // enable exhaustive logging (i.e. message received/sent)
+        // enables exhaustive logging (i.e. message received/sent)
         service.debug_mode();
         // can use global logger of AMS service
         service.logger().information("publisher side running...");
 
         // should first create or join to a domain 
-        // give unique domain name and application name as parameters
+        // gives unique domain name and application name as parameters
         service.create_domain("ams_test", "Test_PUB");
 
         // creates a publisher for the associated message
         service.create_publisher<TestMsg>();
 
-        // should start the reactor for communication
+        // starts the reactor for communication
         service.reactor_start();
 
         for (int i=0; i<100; ++i)
         {       
-            // prepare a message to send
+            // prepares a message to send
             TestMsg msg;
             msg.value = i;
             msg.name = "testing.";
+            // sends the message to all subscribers
             service.send_message(msg);
         }
     }
     
 Subscriber example
 
-    // define a handler class for the message first
+    // defines a handler class for the message first
     class TestMsgHandler : public AMS::IHandler {
     public:
         virtual void handle(AMS::IMsgObj* baseMsg) {
@@ -186,14 +187,15 @@ Subscriber example
 
         // creates a subscriber for the associated message
         service.create_subscriber<TestMsg>();
+        // attaches handler to the subscriber
         TestMsgHandler handler;
         service.subscribe<TestMsg>(handler);
 
-        // should start the reactor for communication
+        // starts the reactor for communication
         service.reactor_start();
         
         // wait enough here to receive messages sent by pusblisher
-        // i.e. sleep() here
+        // i.e. sleep
     }
 
 
