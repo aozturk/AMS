@@ -1,8 +1,8 @@
-Asynchronous Messaging Service (AMS)
-===
+# Asynchronous Messaging Service (AMS) #
 
-Features
---------
+### PubSub Framework for Highly Scalable Distributed Systems ###
+
+## Features ##
 
 #### Asynchronous
 Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.
@@ -31,8 +31,7 @@ message dispatching nexus (i.e. brokers).
 #### Scalable
 Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have no significant impact on application performance.
 
-API
----
+## C++ API ##
 
 Creates or just returns a singleton AMS service instance
 
@@ -91,15 +90,13 @@ Runs the service in debug mode for exhaustive logging
 
     void IService::debug_mode();
 
-Dependencies
-------------
+## Dependencies ##
 
-* Poco C++ 1.4.x
-* ZeroMQ 3.2.x
-* MessagePack 0.5.x
+* [Poco C++ 1.4.x](http://pocoproject.org/)
+* [ZeroMQ 3.2.x](http://zeromq.org/)
+* [MessagePack 0.5.x](http://msgpack.org/)
 
-Example
--------
+## Example ##
 
 Declaring our message class first. Classes can be composed from other classes.
 
@@ -199,8 +196,10 @@ Subscriber example
     }
 
 
-License
--------
+## License ##
 
 Licensed under [the Apache 2.0 license](LICENSE). 
 
+## Special Thanks ##
+
+I would like to thank [Pieter Hintjens](http://hintjens.com/) for influences to start this project and thank [JetBrains](http://www.jetbrains.com) for supporting the AMS project by offering open-source license of their [AppCode IDE](http://www.jetbrains.com/objc/).
