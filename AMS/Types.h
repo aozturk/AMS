@@ -82,9 +82,9 @@ namespace AMS
     } PollTimeout;
 
     typedef enum {
-        POLL_IN        = ZMQ_POLLIN,
-        POLL_OUT       = ZMQ_POLLOUT,
-        POLL_ERROR     = ZMQ_POLLERR
+        AMS_POLL_IN        = ZMQ_POLLIN,
+        AMS_POLL_OUT       = ZMQ_POLLOUT,
+        AMS_POLL_ERROR     = ZMQ_POLLERR
     } PollEventType;
 
     typedef int PollId_t;

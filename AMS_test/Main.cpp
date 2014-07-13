@@ -53,16 +53,16 @@ public:
 class PeerHandler : public AMS::IPeerNotification {
 public:
     void OnAlive(const AMS::Heartbeat& hbeat) {
-//        AMS::IService::instance().logger().information(
-//            Poco::format("OnAlive: peer on %s (%s)", hbeat.host, hbeat.uuid));
+        AMS::IService::instance().logger().information(
+            Poco::format("OnAlive: peer on %s (%s)", hbeat.host, hbeat.uuid));
     }
     void OnUpdate(const AMS::Heartbeat& hbeat) {
-//        AMS::IService::instance().logger().information(
-//            Poco::format("OnUpdate: peer on %s (%s)", hbeat.host, hbeat.uuid));
+        AMS::IService::instance().logger().information(
+            Poco::format("OnUpdate: peer on %s (%s)", hbeat.host, hbeat.uuid));
     }
     void OnDead(const AMS::Heartbeat& hbeat) {
-//        AMS::IService::instance().logger().information(
-//            Poco::format("OnDead: peer on %s (%s)", hbeat.host, hbeat.uuid));
+        AMS::IService::instance().logger().information(
+            Poco::format("OnDead: peer on %s (%s)", hbeat.host, hbeat.uuid));
     }
 };
 
@@ -70,7 +70,7 @@ void sub() {
     AMS::IService& service = AMS::IService::instance();
 
     service.logger().information("subscriber side running...");
-//    service.debug_mode();
+    service.debug_mode();
     service.create_domain("ams_test", "Test_SUB");
 
     service.create_publisher<TestMsg1>();
@@ -104,7 +104,7 @@ void pub() {
     AMS::IService& service = AMS::IService::instance();
 
     service.logger().information("publisher side running...");
-//    service.debug_mode();
+    service.debug_mode();
     service.create_domain("ams_test", "Test_PUB");
 
     service.create_publisher<TestMsg1>();
@@ -121,7 +121,7 @@ void pub() {
     service.register_discovery(&peer_handler);
 
     for (int i=0; i<100; ++i)
-     {       
+     {
         TestMsg1 msg_1;
         msg_1.value = 23;
         msg_1.name = "testing..!";
@@ -137,10 +137,7 @@ void pub() {
 }
 
 int main(int argc, char* argv[]) {
-//    std::vector<std::string> peers = AMS::parse();
-//    for (int i=0; i<peers.size(); ++i)
-//        cout <<  peers[i] << endl;
-    
+
     if (argc == 2) {
         if (!strcmp(argv[1], "--pub")) {
             pub();

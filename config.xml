@@ -1,4 +1,3 @@
 <topology>
-  <peer>172.17.242.16</peer>
-  <peer>172.17.242.31</peer>
+  <peer>127.0.0.1</peer>
 </topology>
