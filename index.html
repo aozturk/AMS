@@ -31,6 +31,9 @@
         <h1>
 <a name="asynchronous-messaging-service-ams" class="anchor" href="#asynchronous-messaging-service-ams"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service (AMS)</h1>
 
+<h3>
+<a name="pubsub-framework-for-highly-scalable-distributed-systems" class="anchor" href="#pubsub-framework-for-highly-scalable-distributed-systems"><span class="octicon octicon-link"></span></a>PubSub Framework for Highly Scalable Distributed Systems</h3>
+
 <h2>
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
 
@@ -75,7 +78,7 @@ message dispatching nexus (i.e. brokers).</li>
 <p>Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have no significant impact on application performance.</p>
 
 <h2>
-<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+<a name="c-api" class="anchor" href="#c-api"><span class="octicon octicon-link"></span></a>C++ API</h2>
 
 <p>Creates or just returns a singleton AMS service instance</p>
 
@@ -151,9 +154,9 @@ void IService::create_publisher();
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <ul>
-<li>Poco C++ 1.4.x</li>
-<li>ZeroMQ 3.2.x</li>
-<li>MessagePack 0.5.x</li>
+<li><a href="http://pocoproject.org/">Poco C++ 1.4.x</a></li>
+<li><a href="http://zeromq.org/">ZeroMQ 3.2.x</a></li>
+<li><a href="http://msgpack.org/">MessagePack 0.5.x</a></li>
 </ul><h2>
 <a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
 
@@ -261,6 +264,11 @@ void sub() {
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Licensed under <a href="LICENSE">the Apache 2.0 license</a>. </p>
+
+<h2>
+<a name="special-thanks" class="anchor" href="#special-thanks"><span class="octicon octicon-link"></span></a>Special Thanks</h2>
+
+<p>I would like to thank <a href="http://hintjens.com/">Pieter Hintjens</a> for influences to start this project and thank <a href="http://www.jetbrains.com">JetBrains</a> for supporting the AMS project by offering open-source license of their <a href="http://www.jetbrains.com/objc/">AppCode IDE</a>.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/aozturk">aozturk</a></p>
