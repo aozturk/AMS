@@ -1,70 +1,61 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>AMS by aozturk</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>AMS</h1>
-        <p>Asynchronous Messaging Service Framework</p>
+    <section class="page-header">
+      <h1 class="project-name">AMS</h1>
+      <h2 class="project-tagline">Asynchronous Messaging Service Framework</h2>
+      <a href="https://github.com/aozturk/AMS" class="btn">View on GitHub</a>
+      <a href="https://github.com/aozturk/AMS/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/aozturk/AMS/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/aozturk/AMS">View the Project on GitHub <small>aozturk/AMS</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/aozturk/AMS/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/aozturk/AMS/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/aozturk/AMS">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="asynchronous-messaging-service-ams" class="anchor" href="#asynchronous-messaging-service-ams"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service (AMS)</h1>
+    <section class="main-content">
+      <h1>
+<a id="asynchronous-messaging-service-ams" class="anchor" href="#asynchronous-messaging-service-ams" aria-hidden="true"><span class="octicon octicon-link"></span></a>Asynchronous Messaging Service (AMS)</h1>
 
 <h3>
-<a name="pubsub-framework-for-highly-scalable-distributed-systems" class="anchor" href="#pubsub-framework-for-highly-scalable-distributed-systems"><span class="octicon octicon-link"></span></a>PubSub Framework for Highly Scalable Distributed Systems</h3>
+<a id="pubsub-framework-for-highly-scalable-distributed-systems" class="anchor" href="#pubsub-framework-for-highly-scalable-distributed-systems" aria-hidden="true"><span class="octicon octicon-link"></span></a>PubSub Framework for Highly Scalable Distributed Systems</h3>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <h4>
-<a name="asynchronous" class="anchor" href="#asynchronous"><span class="octicon octicon-link"></span></a>Asynchronous</h4>
+<a id="asynchronous" class="anchor" href="#asynchronous" aria-hidden="true"><span class="octicon octicon-link"></span></a>Asynchronous</h4>
 
 <p>Asynchronous message passing systems deliver a message from sender to receiver, without waiting for the receiver to be ready. The advantage of asynchronous communication is that the sender and receiver can overlap their computation because they do not wait for each other.</p>
 
 <p>The reactor used in AMS handles requests delivered concurrently by multiple event resources. Mesage dispatcher handles registering and unregistering of application-defined message handlers, and dispatches messages from the demultiplexer to the associated handlers. Event demultiplexer uses an event loop to block on all resources.</p>
 
 <h4>
-<a name="loosely-coupled" class="anchor" href="#loosely-coupled"><span class="octicon octicon-link"></span></a>Loosely Coupled</h4>
+<a id="loosely-coupled" class="anchor" href="#loosely-coupled" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loosely Coupled</h4>
 
 <p>In a data system based on AMS, any module may be introduced into or removed from the system at any time without inhibiting the ability of any other module to continue sending and receiving messages. The system’s modules have no inter-dependency to become or stay operational. </p>
 
 <p>By publish–subscribe pattern used in AMS, senders of messages called publishers do not program the messages to be sent directly to specific receivers. Instead, published messages are characterized into classes, without knowledge of subscribers. Similarly, subscribers express interest in one or more classes, and only receive messages that are of interest, without knowledge of publishers.</p>
 
 <h4>
-<a name="fault-tolerant" class="anchor" href="#fault-tolerant"><span class="octicon octicon-link"></span></a>Fault-tolerant</h4>
+<a id="fault-tolerant" class="anchor" href="#fault-tolerant" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fault-tolerant</h4>
 
 <p>AMS-based systems are highly robust, lacking any single point of failure and tolerant of unplanned module termination. </p>
 
 <h4>
-<a name="dynamic-discovery" class="anchor" href="#dynamic-discovery"><span class="octicon octicon-link"></span></a>Dynamic Discovery</h4>
+<a id="dynamic-discovery" class="anchor" href="#dynamic-discovery" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dynamic Discovery</h4>
 
 <p>AMS provides dynamic discovery of publishers and subscribers that makes your applications extensible. This means the application does not have to know or configure the endpoints for communications because they are automatically discovered. AMS will also discover the type of data being published. </p>
 
 <p>If multicast is not supported for target environment or dynamic discovery is not preferred, AMS also uses customized config.xml file during initialization to determine peers in the network topology. </p>
 
 <h4>
-<a name="fast" class="anchor" href="#fast"><span class="octicon octicon-link"></span></a>Fast</h4>
+<a id="fast" class="anchor" href="#fast" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fast</h4>
 
 <p>Communication within an AMS-based system is rapid and efficient:</p>
 
@@ -72,13 +63,15 @@
 <li>Messages are exchanged directly between modules rather than through any central
 message dispatching nexus (i.e. brokers).</li>
 <li>Messages are automatically conveyed using the most suitable underlying transport service (TCP/IP) to which the sending and receiving modules both have access. </li>
-</ul><h4>
-<a name="scalable" class="anchor" href="#scalable"><span class="octicon octicon-link"></span></a>Scalable</h4>
+</ul>
+
+<h4>
+<a id="scalable" class="anchor" href="#scalable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scalable</h4>
 
 <p>Finally, AMS provides high scalability; hundreds or thousands of cooperating modules have no significant impact on application performance.</p>
 
 <h2>
-<a name="c-api" class="anchor" href="#c-api"><span class="octicon octicon-link"></span></a>C++ API</h2>
+<a id="c-api" class="anchor" href="#c-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>C++ API</h2>
 
 <p>Creates or just returns a singleton AMS service instance</p>
 
@@ -151,14 +144,16 @@ void IService::create_publisher();
 </code></pre>
 
 <h2>
-<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <ul>
 <li><a href="http://pocoproject.org/">Poco C++ 1.4.x</a></li>
 <li><a href="http://zeromq.org/">ZeroMQ 3.2.x</a></li>
 <li><a href="http://msgpack.org/">MessagePack 0.5.x</a></li>
-</ul><h2>
-<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+</ul>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
 <p>Declaring our message class first. Classes can be composed from other classes.</p>
 
@@ -261,22 +256,24 @@ void sub() {
 </code></pre>
 
 <h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Licensed under <a href="LICENSE">the Apache 2.0 license</a>. </p>
 
 <h2>
-<a name="special-thanks" class="anchor" href="#special-thanks"><span class="octicon octicon-link"></span></a>Special Thanks</h2>
+<a id="special-thanks" class="anchor" href="#special-thanks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special Thanks</h2>
 
 <p>I would like to thank <a href="http://hintjens.com/">Pieter Hintjens</a> for influences to start this project and thank <a href="http://www.jetbrains.com">JetBrains</a> for supporting the AMS project by offering open-source license of their <a href="http://www.jetbrains.com/objc/">AppCode IDE</a>.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/aozturk">aozturk</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/aozturk/AMS">AMS</a> is maintained by <a href="https://github.com/aozturk">aozturk</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
